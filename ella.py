@@ -1,15 +1,16 @@
+#Imported necessary packages
+
 import os
 import google.generativeai as genai
 from textblob import TextBlob
 
-# This is the key generated from Gemini Google AI studio 
-# Link: https://aistudio.google.com/app/apikey
+#get api key by environment file
 google_api_key = os.getenv("GOOGLE_API_KEY")
 
 # Configure API key for Google Generative AI
 genai.configure(api_key=google_api_key)
 
-# Function to convert text to plain format
+# convert text to plain format
 def to_plain_text(text):
     lines = text.split('\n')
     formatted_lines = []
@@ -20,14 +21,14 @@ def to_plain_text(text):
         formatted_lines.append(line)
     return '\n'.join(formatted_lines)
 
-# Function to generate response from the AI
+# generate response from the AI
 def generate_response(user_input, context):
     model = genai.GenerativeModel('gemini-1.5-flash')
     prompt = f"{context} {user_input}"
     response = model.generate_content(prompt)
     return to_plain_text(response.text)
 
-# Function to analyze sentiment of user input
+# analyze sentiment of user input
 def analyze_sentiment(user_input):
     analysis = TextBlob(user_input)
     sentiment = analysis.sentiment.polarity
@@ -38,7 +39,7 @@ def analyze_sentiment(user_input):
     else:
         return "neutral"
 
-# Function to handle predefined questions and hotel details
+# handle predefined questions and hotel details
 def handle_hotel_details():
     print("Hello! I am Ella, your best hotel assistant to find any hotel in Nigeria.")
     print("You can ask me about hotels in Nigeria, and I'll provide you with detailed information.")
@@ -50,11 +51,11 @@ def handle_hotel_details():
         print("3. Exit")
 
         option = input("Select an option (1, 2, 3): ").strip()
-        
+
         if option == '1':
             user_input = input("Tell Ella the hotel you want to know about: ").strip()
             if not user_input:
-                print("Please enter a valid hotel name or query.")
+                print("Error! Please enter a valid hotel name.")
                 continue
 
             # Generate response from AI 
@@ -83,7 +84,7 @@ def handle_hotel_details():
                 print("Invalid budget option. Please try again.")
                 continue
 
-            # Generate recommendations from AI based on destination and budget
+            # Generate recommendations from AI based on location and budget
             response = generate_response(destination, f"Provide hotel recommendations in {destination} for a {budget_range} range. Include address and features if possible.")
             print(f"Response from Ella:\n{response}")
 
@@ -96,7 +97,7 @@ def handle_hotel_details():
             continue
 
         # Satisfaction question with sentiment analysis
-        print("\nHow satisfied are you with the information provided by Ella? answer(Satisfied, Not satisfied, Neutral)")
+        print("\nHow satisfied are you with the information provided by Ella? \nAnswer(Satisfied, Not satisfied, Neutral)")
         satisfaction = input("You: ").strip()
         sentiment = analyze_sentiment(satisfaction)
         
