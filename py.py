@@ -52,19 +52,18 @@ def handle_hotel_details():
         option = input("Select an option (1, 2, 3): ").strip()
         
         if option == '1':
-            user_input = input("You: ").strip()
+            user_input = input("Tell Ella the hotel you want to know about: ").strip()
             if not user_input:
                 print("Please enter a valid hotel name or query.")
                 continue
 
-            # sentiment analysis
-            sentiment = analyze_sentiment(user_input)
-            sentiment_context = f"User sentiment is {sentiment}. Provide detailed information about hotels in Nigeria. Include address and features and the website where they can get to book the hotel if possible."
-
             # Generate response from AI 
-            response = generate_response(user_input, sentiment_context)
-            print(f"Response from Ella:\n{response}")
-
+            response = generate_response(user_input, "Provide detailed information about the hotel the user asks about in Nigeria. Include address and features if possible.")
+            
+            if "I'm sorry" in response:
+                print(f"Response from Ella: I'm sorry, but I don't have information about that hotel. Please try another one.")
+            else:
+                print(f"Response from Ella:\n{response}")
         elif option == '2':
             print("Please enter your preferred hotel destination.")
             destination = input("You: ").strip()
@@ -84,12 +83,8 @@ def handle_hotel_details():
                 print("Invalid budget option. Please try again.")
                 continue
 
-            # Analyze sentiment of destination input
-            sentiment = analyze_sentiment(destination)
-            sentiment_context = f"User sentiment is {sentiment}. Provide hotel recommendations in {destination} for a {budget_range} range. Include address and features if possible."
-
             # Generate recommendations from AI based on destination and budget
-            response = generate_response(destination, sentiment_context)
+            response = generate_response(destination, f"Provide hotel recommendations in {destination} for a {budget_range} range. Include address and features if possible.")
             print(f"Response from Ella:\n{response}")
 
         elif option == '3':
@@ -98,6 +93,19 @@ def handle_hotel_details():
 
         else:
             print("Invalid option. Please select a valid option (1, 2, 3).")
+            continue
+
+        # Satisfaction question with sentiment analysis
+        print("\nHow satisfied are you with the information provided by Ella? answer(Satisfied, Not satisfied, Neutral)")
+        satisfaction = input("You: ").strip()
+        sentiment = analyze_sentiment(satisfaction)
+        
+        if sentiment == "positive":
+            print("Thank you for your feedback! We will continue to improve Ella's responses.")
+        elif sentiment == "negative":
+            print("Sorry to hear that you are not satisfied. Please provide more information about what we can help you with.")
+        else:
+            print("Thank you for your feedback! We will continue to improve Ella's responses.")
 
 if __name__ == "__main__":
     handle_hotel_details()
