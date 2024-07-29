@@ -35,12 +35,12 @@ def generate_follow_up_question(user_input):
 # Function to generate options based on user input
 def generate_options(user_input):
     model = genai.GenerativeModel('gemini-1.5-flash')
-    options = model.generate_content(f"Generate options for follow-up based on: {user_input}")
+    options = model.generate_content(f"Generate options for follow-up based on: {user_input} only about health")
     return to_plain_text(options.text)
 
 # Function to display the main menu
 def main_menu():
-    greetings = ["Hello user! How can I help you today?", "Hi there! What can I do for you?", "Greetings! How may I assist you?", "Hey! What do you need help with?"]
+    greetings = ["Hello there! How can I help you today?", "Welcome! I'm here to assist you with your health journey. What can I do for you?", "Hi! I'm excited to connect with you. How are you feeling today?"]
     print(random.choice(greetings))
 
 def healthcare_advice(user_input):
